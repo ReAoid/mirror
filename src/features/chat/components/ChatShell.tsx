@@ -1,12 +1,14 @@
 import { useEffect } from "react";
 import { SettingsPanel } from "../../settings/components/SettingsPanel";
+import { getToolLabel } from "../../agent/tools/toolCatalog";
 import { useSettingsStore } from "../../../stores/settingsStore";
 import { useChatSession } from "../hooks/useChatSession";
 import { ChatComposer } from "./ChatComposer";
 import { MessageList } from "./MessageList";
 
 export function ChatShell() {
-  const { messages, isGenerating, lastError, sendMessage, createConversation, clearConversation } = useChatSession();
+  const { messages, isGenerating, currentToolCall, lastError, sendMessage, createConversation, clearConversation } =
+    useChatSession();
   const settings = useSettingsStore();
 
   useEffect(() => {
@@ -49,7 +51,7 @@ export function ChatShell() {
             <h2>与 Agent 对话</h2>
           </div>
           <span className={`status-pill ${isGenerating ? "status-running" : ""}`}>
-            {isGenerating ? "运行中" : "空闲"}
+            {currentToolCall ? `工具：${getToolLabel(currentToolCall)}` : isGenerating ? "运行中" : "空闲"}
           </span>
         </header>
 

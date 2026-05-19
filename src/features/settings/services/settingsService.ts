@@ -1,4 +1,5 @@
 import { invokeOptional } from "../../../shared/lib/tauri";
+import { defaultEnabledTools } from "../../agent/tools/toolCatalog";
 import type { AppSettings } from "../types";
 
 const STORAGE_KEY = "mirror.settings";
@@ -11,7 +12,7 @@ export const defaultSettings: AppSettings = {
   deepseekApiKey: "",
   temperature: 0.7,
   maxTokens: 2048,
-  enabledTools: [],
+  enabledTools: defaultEnabledTools,
 };
 
 export async function loadSettings(): Promise<AppSettings> {

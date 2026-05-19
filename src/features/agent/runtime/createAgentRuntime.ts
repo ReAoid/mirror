@@ -3,6 +3,7 @@ import type { AgentMessage } from "@earendil-works/pi-agent-core";
 import type { Api, AssistantMessage, Message, Model, Usage } from "@earendil-works/pi-ai";
 import { createModelClient } from "../models/createModelClient";
 import type { ChatMessage } from "../../chat/types";
+import { getEnabledAgentTools } from "../tools/registry";
 import type { AgentContext } from "./agentContext";
 import type { AgentEventHandler } from "./streamAdapter";
 import { emitPiAgentEvent, getAssistantText } from "./streamAdapter";
@@ -15,14 +16,24 @@ export function createAgentRuntime(): AgentRuntime {
   return {
     async respond(input, context, runId, onEvent) {
       const modelClient = createModelClient(context.model);
+      const tools = getEnabledAgentTools(context.enabledTools);
+      const enabledToolNames = new Set(tools.map((tool) => tool.name));
       const agent = new Agent({
         initialState: {
           systemPrompt: context.systemPrompt,
           model: modelClient.model,
           messages: toAgentMessages(context.messages, modelClient.model),
+          tools,
         },
         getApiKey: modelClient.getApiKey,
         toolExecution: "sequential",
+        beforeToolCall: async ({ toolCall }) => {
+          if (!enabledToolNames.has(toolCall.name)) {
+            return { block: true, reason: `工具未启用：${toolCall.name}` };
+          }
+
+          return undefined;
+        },
       });
 
       agent.subscribe((event) => emitPiAgentEvent(runId, event, onEvent));

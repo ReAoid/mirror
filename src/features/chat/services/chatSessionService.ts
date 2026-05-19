@@ -48,6 +48,16 @@ export async function sendMessage(content: string) {
       return;
     }
 
+    if (event.type === "tool_call_started") {
+      agentStore.startToolCall(event.runId, event.toolName);
+      return;
+    }
+
+    if (event.type === "tool_call_finished") {
+      agentStore.finishToolCall(event.runId, event.toolName);
+      return;
+    }
+
     if (event.type === "run_finished") {
       latestChatStore.updateMessage(conversationId, assistantMessageId, { status: "done" });
       agentStore.finishRun(event.runId);

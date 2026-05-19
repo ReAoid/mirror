@@ -8,6 +8,8 @@ type AgentState = {
   currentToolCall?: string;
   lastError?: string;
   startRun: (runId: string) => void;
+  startToolCall: (runId: string, toolName: string) => void;
+  finishToolCall: (runId: string, toolName: string) => void;
   finishRun: (runId: string) => void;
   failRun: (runId: string, message: string) => void;
   stopRun: () => void;
@@ -24,6 +26,22 @@ export const useAgentStore = create<AgentState>((set) => ({
       currentToolCall: undefined,
       lastError: undefined,
     }),
+  startToolCall: (runId, toolName) =>
+    set((state) =>
+      state.activeRunId === runId
+        ? {
+            currentToolCall: toolName,
+          }
+        : state,
+    ),
+  finishToolCall: (runId, toolName) =>
+    set((state) =>
+      state.activeRunId === runId && state.currentToolCall === toolName
+        ? {
+            currentToolCall: undefined,
+          }
+        : state,
+    ),
   finishRun: (runId) =>
     set((state) =>
       state.activeRunId === runId

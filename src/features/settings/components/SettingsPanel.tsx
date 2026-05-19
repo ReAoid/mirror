@@ -1,5 +1,6 @@
 import { type FormEvent, useEffect, useState } from "react";
 import { useSettingsStore } from "../../../stores/settingsStore";
+import { basicToolDefinitions } from "../../agent/tools/toolCatalog";
 import type { AppSettings, ModelProvider } from "../types";
 
 type SettingsForm = Pick<
@@ -11,6 +12,7 @@ type SettingsForm = Pick<
   | "deepseekApiKey"
   | "temperature"
   | "maxTokens"
+  | "enabledTools"
 >;
 
 const MODEL_PROVIDER_OPTIONS: Array<{ value: ModelProvider; label: string }> = [
@@ -34,11 +36,22 @@ export function SettingsPanel() {
     settings.deepseekApiKey,
     settings.temperature,
     settings.maxTokens,
+    settings.enabledTools,
   ]);
 
   const updateField = <Key extends keyof SettingsForm>(key: Key, value: SettingsForm[Key]) => {
     setStatus("");
     setForm((current) => ({ ...current, [key]: value }));
+  };
+
+  const toggleTool = (toolId: string, enabled: boolean) => {
+    setStatus("");
+    setForm((current) => ({
+      ...current,
+      enabledTools: enabled
+        ? [...new Set([...current.enabledTools, toolId])]
+        : current.enabledTools.filter((enabledTool) => enabledTool !== toolId),
+    }));
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -118,6 +131,23 @@ export function SettingsPanel() {
         </label>
       </div>
 
+      <fieldset className="tool-settings">
+        <legend>基础工具</legend>
+        {basicToolDefinitions.map((tool) => (
+          <label key={tool.id} className="tool-option">
+            <input
+              checked={form.enabledTools.includes(tool.id)}
+              type="checkbox"
+              onChange={(event) => toggleTool(tool.id, event.target.checked)}
+            />
+            <span>
+              <strong>{tool.label}</strong>
+              <small>{tool.description}</small>
+            </span>
+          </label>
+        ))}
+      </fieldset>
+
       <div className="settings-actions">
         <button type="submit">保存设置</button>
         {status ? <span>{status}</span> : null}
@@ -135,6 +165,7 @@ function toForm(settings: AppSettings): SettingsForm {
     deepseekApiKey: settings.deepseekApiKey,
     temperature: settings.temperature,
     maxTokens: settings.maxTokens,
+    enabledTools: settings.enabledTools,
   };
 }
 

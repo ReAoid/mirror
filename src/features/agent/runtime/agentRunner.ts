@@ -38,6 +38,7 @@ export async function runAgent({ input, messages, settings = defaultSettings, on
         messages,
         model: createModelConfig(settings),
         systemPrompt: defaultSystemPrompt,
+        enabledTools: settings.enabledTools,
       },
       runId,
       handleRuntimeEvent,

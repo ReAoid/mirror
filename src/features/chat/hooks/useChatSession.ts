@@ -9,6 +9,7 @@ export function useChatSession() {
   const createConversation = useChatStore((state) => state.createConversation);
   const clearConversation = useChatStore((state) => state.clearConversation);
   const isGenerating = useAgentStore((state) => state.isGenerating);
+  const currentToolCall = useAgentStore((state) => state.currentToolCall);
   const lastError = useAgentStore((state) => state.lastError);
 
   const messages = useMemo(
@@ -20,6 +21,7 @@ export function useChatSession() {
     activeConversationId,
     messages,
     isGenerating,
+    currentToolCall,
     lastError,
     sendMessage,
     createConversation,

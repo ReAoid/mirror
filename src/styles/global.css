@@ -160,6 +160,50 @@ h2 {
   gap: 10px;
 }
 
+.tool-settings {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  border: 1px solid rgba(159, 211, 255, 0.14);
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.tool-settings legend {
+  padding: 0 6px;
+  color: #8fa6c2;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.tool-option {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: start;
+}
+
+.settings-panel .tool-option input {
+  width: auto;
+  margin-top: 3px;
+}
+
+.tool-option strong,
+.tool-option small {
+  display: block;
+}
+
+.tool-option strong {
+  color: #e5eefb;
+}
+
+.tool-option small {
+  margin-top: 3px;
+  color: #8fa6c2;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
 .settings-actions {
   display: flex;
   align-items: center;

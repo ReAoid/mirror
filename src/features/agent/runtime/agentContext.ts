@@ -5,4 +5,5 @@ export type AgentContext = {
   messages: ChatMessage[];
   model: ModelConfig;
   systemPrompt: string;
+  enabledTools: string[];
 };
