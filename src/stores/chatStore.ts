@@ -7,6 +7,7 @@ type ChatState = {
   activeConversationId: string;
   messagesByConversationId: Record<string, ChatMessage[]>;
   createConversation: () => string;
+  setActiveConversation: (conversationId: string) => void;
   appendMessage: (conversationId: string, message: ChatMessage) => void;
   updateMessage: (
     conversationId: string,
@@ -61,6 +62,12 @@ export const useChatStore = create<ChatState>((set) => ({
 
     return conversationId;
   },
+  setActiveConversation: (conversationId) =>
+    set((state) => ({
+      activeConversationId: state.conversations.some((conversation) => conversation.id === conversationId)
+        ? conversationId
+        : state.activeConversationId,
+    })),
   appendMessage: (conversationId, message) =>
     set((state) => ({
       messagesByConversationId: {

@@ -22,17 +22,26 @@ export function ChatComposer({ disabled, onSend }: ChatComposerProps) {
 
   return (
     <form className="chat-composer" onSubmit={handleSubmit}>
+      <div className="composer-toolbar">
+        <button aria-label="添加上下文" type="button">
+          +
+        </button>
+        <button type="button">操作前询问</button>
+      </div>
       <textarea
         aria-label="输入消息"
         disabled={disabled}
-        placeholder="输入消息，按发送开始调用 LLM..."
+        placeholder="选中桌面任意文字，会浮出一个临时输入框"
         rows={3}
         value={content}
         onChange={(event) => setContent(event.target.value)}
       />
-      <button disabled={disabled || !content.trim()} type="submit">
-        {disabled ? "生成中" : "发送"}
-      </button>
+      <div className="composer-footer">
+        <span>Qwen3.5 122b A10b</span>
+        <button disabled={disabled || !content.trim()} type="submit">
+          {disabled ? "生成中" : "发送"}
+        </button>
+      </div>
     </form>
   );
 }
