@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { SettingsPanel } from "../../settings/components/SettingsPanel";
 import { useSettingsStore } from "../../../stores/settingsStore";
 import { useChatSession } from "../hooks/useChatSession";
 import { ChatComposer } from "./ChatComposer";
@@ -28,6 +29,8 @@ export function ChatShell() {
           <strong>{settings.modelName}</strong>
           <small>{settings.modelProvider}</small>
         </div>
+
+        <SettingsPanel />
 
         <div className="sidebar-actions">
           <button onClick={createConversation} type="button">

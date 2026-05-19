@@ -32,7 +32,7 @@ export const useChatStore = create<ChatState>((set) => ({
       {
         id: createId("msg"),
         role: "assistant",
-        content: "你好，我是 Mirror Agent MVP。现在我会用模拟运行时回复，后续可以替换为 pi-agent-core。",
+        content: "你好，我是 Mirror Agent MVP。现在已经接入 pi-agent-core，配置 API Key 后可以调用真实 LLM。",
         createdAt: Date.now(),
         status: "done",
       },

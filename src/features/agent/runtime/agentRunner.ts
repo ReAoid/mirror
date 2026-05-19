@@ -23,13 +23,29 @@ export async function runAgent({ input, messages, settings = defaultSettings, on
   try {
     onEvent({ type: "run_started", runId });
 
-    const response = await runtime.respond(input, {
-      messages,
-      model: createModelConfig(settings),
-      systemPrompt: defaultSystemPrompt,
-    });
+    let receivedStreamingTokens = false;
+    const handleRuntimeEvent: AgentEventHandler = (event) => {
+      if (event.type === "token") {
+        receivedStreamingTokens = true;
+      }
 
-    await emitTextAsTokenStream(runId, response, onEvent);
+      onEvent(event);
+    };
+
+    const response = await runtime.respond(
+      input,
+      {
+        messages,
+        model: createModelConfig(settings),
+        systemPrompt: defaultSystemPrompt,
+      },
+      runId,
+      handleRuntimeEvent,
+    );
+
+    if (!receivedStreamingTokens && response) {
+      await emitTextAsTokenStream(runId, response, onEvent);
+    }
     onEvent({ type: "run_finished", runId });
   } catch (error) {
     onEvent({

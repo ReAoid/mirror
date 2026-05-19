@@ -19,6 +19,8 @@ body {
 }
 
 button,
+input,
+select,
 textarea {
   font: inherit;
 }
@@ -51,6 +53,8 @@ button:disabled {
   display: flex;
   flex-direction: column;
   gap: 24px;
+  max-height: 100vh;
+  overflow: auto;
   padding: 32px;
   border-right: 1px solid rgba(159, 211, 255, 0.16);
   background: rgba(6, 16, 31, 0.78);
@@ -107,6 +111,65 @@ h2 {
 .sidebar-actions button:last-child {
   color: #dbeafe;
   background: rgba(255, 255, 255, 0.08);
+}
+
+.settings-panel {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid rgba(159, 211, 255, 0.16);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.settings-panel h2 {
+  font-size: 18px;
+}
+
+.settings-panel label {
+  display: grid;
+  gap: 6px;
+  color: #8fa6c2;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.settings-panel input,
+.settings-panel select {
+  width: 100%;
+  border: 1px solid rgba(159, 211, 255, 0.18);
+  border-radius: 12px;
+  padding: 10px 12px;
+  color: #e5eefb;
+  background: rgba(255, 255, 255, 0.06);
+  outline: none;
+}
+
+.settings-panel input:focus,
+.settings-panel select:focus {
+  border-color: #9fd3ff;
+}
+
+.settings-panel select option {
+  color: #06101f;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.settings-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.settings-actions span {
+  color: #a7f3d0;
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .chat-panel {

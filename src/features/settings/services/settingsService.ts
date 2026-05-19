@@ -4,8 +4,13 @@ import type { AppSettings } from "../types";
 const STORAGE_KEY = "mirror.settings";
 
 export const defaultSettings: AppSettings = {
-  modelProvider: "openai-compatible",
+  modelProvider: "openai",
   modelName: "gpt-4o-mini",
+  openaiApiKey: "",
+  openaiBaseUrl: "https://api.openai.com/v1",
+  anthropicApiKey: "",
+  deepseekApiKey: "",
+  deepseekBaseUrl: "https://api.deepseek.com/v1",
   temperature: 0.7,
   maxTokens: 2048,
   enabledTools: [],

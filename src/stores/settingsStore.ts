@@ -20,6 +20,11 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
     await saveSettings({
       modelProvider: nextSettings.modelProvider,
       modelName: nextSettings.modelName,
+      openaiApiKey: nextSettings.openaiApiKey,
+      openaiBaseUrl: nextSettings.openaiBaseUrl,
+      anthropicApiKey: nextSettings.anthropicApiKey,
+      deepseekApiKey: nextSettings.deepseekApiKey,
+      deepseekBaseUrl: nextSettings.deepseekBaseUrl,
       temperature: nextSettings.temperature,
       maxTokens: nextSettings.maxTokens,
       enabledTools: nextSettings.enabledTools,

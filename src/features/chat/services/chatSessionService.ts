@@ -13,6 +13,7 @@ export async function sendMessage(content: string) {
 
   const chatStore = useChatStore.getState();
   const conversationId = chatStore.activeConversationId;
+  const history = chatStore.messagesByConversationId[conversationId] ?? [];
   const userMessage = {
     id: createId("msg"),
     role: "user" as const,
@@ -64,7 +65,7 @@ export async function sendMessage(content: string) {
 
   await runAgent({
     input: text,
-    messages: useChatStore.getState().messagesByConversationId[conversationId] ?? [],
+    messages: history,
     settings: useSettingsStore.getState(),
     onEvent: handleEvent,
   });

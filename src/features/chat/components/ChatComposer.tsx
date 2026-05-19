@@ -25,7 +25,7 @@ export function ChatComposer({ disabled, onSend }: ChatComposerProps) {
       <textarea
         aria-label="输入消息"
         disabled={disabled}
-        placeholder="输入消息，按发送开始模拟 Agent 运行..."
+        placeholder="输入消息，按发送开始调用 LLM..."
         rows={3}
         value={content}
         onChange={(event) => setContent(event.target.value)}
