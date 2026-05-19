@@ -5,10 +5,8 @@ export type ModelConfig = Pick<
   | "modelProvider"
   | "modelName"
   | "openaiApiKey"
-  | "openaiBaseUrl"
   | "anthropicApiKey"
   | "deepseekApiKey"
-  | "deepseekBaseUrl"
   | "temperature"
   | "maxTokens"
 >;
@@ -18,10 +16,8 @@ export function createModelConfig(settings: AppSettings): ModelConfig {
     modelProvider: settings.modelProvider,
     modelName: settings.modelName,
     openaiApiKey: settings.openaiApiKey,
-    openaiBaseUrl: settings.openaiBaseUrl,
     anthropicApiKey: settings.anthropicApiKey,
     deepseekApiKey: settings.deepseekApiKey,
-    deepseekBaseUrl: settings.deepseekBaseUrl,
     temperature: settings.temperature,
     maxTokens: settings.maxTokens,
   };

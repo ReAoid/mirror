@@ -7,10 +7,8 @@ type SettingsForm = Pick<
   | "modelProvider"
   | "modelName"
   | "openaiApiKey"
-  | "openaiBaseUrl"
   | "anthropicApiKey"
   | "deepseekApiKey"
-  | "deepseekBaseUrl"
   | "temperature"
   | "maxTokens"
 >;
@@ -25,7 +23,6 @@ export function SettingsPanel() {
   const settings = useSettingsStore();
   const [form, setForm] = useState<SettingsForm>(() => toForm(settings));
   const [status, setStatus] = useState("");
-  const showsBaseUrl = form.modelProvider === "openai" || form.modelProvider === "deepseek";
 
   useEffect(() => {
     setForm(toForm(settings));
@@ -33,10 +30,8 @@ export function SettingsPanel() {
     settings.modelProvider,
     settings.modelName,
     settings.openaiApiKey,
-    settings.openaiBaseUrl,
     settings.anthropicApiKey,
     settings.deepseekApiKey,
-    settings.deepseekBaseUrl,
     settings.temperature,
     settings.maxTokens,
   ]);
@@ -51,8 +46,6 @@ export function SettingsPanel() {
     await settings.saveSettings({
       ...form,
       modelName: form.modelName.trim(),
-      openaiBaseUrl: form.openaiBaseUrl.trim(),
-      deepseekBaseUrl: form.deepseekBaseUrl.trim(),
     });
     setStatus("设置已保存");
   };
@@ -100,18 +93,6 @@ export function SettingsPanel() {
         />
       </label>
 
-      {showsBaseUrl ? (
-        <label>
-          <span>Base URL</span>
-          <input
-            placeholder={getBaseUrlPlaceholder(form.modelProvider)}
-            type="url"
-            value={getBaseUrlValue(form)}
-            onChange={(event) => setBaseUrlValue(updateField, form.modelProvider, event.target.value)}
-          />
-        </label>
-      ) : null}
-
       <div className="settings-grid">
         <label>
           <span>Temperature</span>
@@ -150,10 +131,8 @@ function toForm(settings: AppSettings): SettingsForm {
     modelProvider: settings.modelProvider,
     modelName: settings.modelName,
     openaiApiKey: settings.openaiApiKey,
-    openaiBaseUrl: settings.openaiBaseUrl,
     anthropicApiKey: settings.anthropicApiKey,
     deepseekApiKey: settings.deepseekApiKey,
-    deepseekBaseUrl: settings.deepseekBaseUrl,
     temperature: settings.temperature,
     maxTokens: settings.maxTokens,
   };
@@ -207,33 +186,4 @@ function getApiKeyPlaceholder(provider: ModelProvider): string {
   }
 
   return "sk-...";
-}
-
-function getBaseUrlValue(form: SettingsForm): string {
-  if (form.modelProvider === "deepseek") {
-    return form.deepseekBaseUrl;
-  }
-
-  return form.openaiBaseUrl;
-}
-
-function setBaseUrlValue(
-  updateField: <Key extends keyof SettingsForm>(key: Key, value: SettingsForm[Key]) => void,
-  provider: ModelProvider,
-  value: string,
-) {
-  if (provider === "deepseek") {
-    updateField("deepseekBaseUrl", value);
-    return;
-  }
-
-  updateField("openaiBaseUrl", value);
-}
-
-function getBaseUrlPlaceholder(provider: ModelProvider): string {
-  if (provider === "deepseek") {
-    return "https://api.deepseek.com/v1";
-  }
-
-  return "https://api.openai.com/v1";
 }
