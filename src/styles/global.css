@@ -90,9 +90,7 @@ select,
   align-items: center;
   justify-content: space-between;
   height: var(--titlebar-h);
-  border-bottom: 1px solid var(--overlay-light);
   padding: 0 10px;
-  background-color: rgba(248, 245, 237, 0.82);
   pointer-events: auto;
   -webkit-app-region: drag;
 }
@@ -105,7 +103,7 @@ select,
   height: 24px;
   border-radius: var(--radius-sm);
   color: var(--text-light);
-  background: transparent;
+  background: rgba(248, 245, 237, 0.4);
   opacity: 0.8;
   pointer-events: auto;
   transition:
@@ -186,7 +184,7 @@ select,
   flex-direction: column;
   width: var(--sidebar-width);
   overflow: hidden;
-  padding: var(--titlebar-h) 0 0 8px;
+  padding: 0 0 0 8px;
   background: transparent;
   transition: width var(--duration-slow) var(--ease-out);
 }
@@ -609,7 +607,6 @@ h2 {
   flex-shrink: 0;
   width: var(--preview-panel-width);
   overflow: hidden;
-  padding-top: var(--titlebar-h);
   transition: width var(--duration-slow) var(--ease-out);
 }
 
@@ -659,7 +656,6 @@ h2 {
   flex-direction: column;
   width: var(--jian-sidebar-width);
   overflow: hidden;
-  padding-top: var(--titlebar-h);
   transition: width var(--duration-slow) var(--ease-out);
 }
 
