@@ -1,4 +1,4 @@
-import { useEffect, type MouseEvent } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { AppLayout } from "../../../app/AppLayout";
 import { getToolLabel } from "../../agent/tools/toolCatalog";
@@ -7,6 +7,8 @@ import { useSettingsStore } from "../../../stores/settingsStore";
 import { useChatSession } from "../hooks/useChatSession";
 import { ChatComposer } from "./ChatComposer";
 import { MessageList } from "./MessageList";
+
+const IS_WINDOWS = /Windows/i.test(navigator.userAgent);
 
 function handleTitlebarMouseDown(event: MouseEvent<HTMLDivElement>) {
   if (event.button !== 0 || event.target !== event.currentTarget || !("__TAURI_INTERNALS__" in window)) {
@@ -42,6 +44,48 @@ export function ChatShell() {
       void settings.loadSettings();
     }
   }, [settings]);
+
+  const [isMaximized, setIsMaximized] = useState(false);
+
+  useEffect(() => {
+    if (!IS_WINDOWS || !("__TAURI_INTERNALS__" in window)) return;
+
+    const win = getCurrentWindow();
+    let active = true;
+
+    win.isMaximized().then((v) => {
+      if (active) setIsMaximized(v);
+    });
+
+    let unlisten: (() => void) | undefined;
+    win.onResized(() => {
+      win.isMaximized().then((v) => {
+        if (active) setIsMaximized(v);
+      });
+    }).then((fn) => {
+      if (active) unlisten = fn;
+    });
+
+    return () => {
+      active = false;
+      unlisten?.();
+    };
+  }, []);
+
+  const handleMinimize = () => {
+    if (!("__TAURI_INTERNALS__" in window)) return;
+    void getCurrentWindow().minimize();
+  };
+
+  const handleToggleMaximize = () => {
+    if (!("__TAURI_INTERNALS__" in window)) return;
+    void getCurrentWindow().toggleMaximize();
+  };
+
+  const handleClose = () => {
+    if (!("__TAURI_INTERNALS__" in window)) return;
+    void getCurrentWindow().close();
+  };
 
   return (
     <AppLayout
@@ -94,6 +138,55 @@ export function ChatShell() {
                 <line x1="15" y1="3" x2="15" y2="21" />
               </svg>
             </button>
+            {IS_WINDOWS && (
+              <>
+                <div className="win-controls-sep" />
+                <button
+                  className="win-control-btn win-minimize"
+                  title="最小化"
+                  type="button"
+                  onMouseDown={(event) => event.preventDefault()}
+                  onClick={handleMinimize}
+                  aria-label="最小化"
+                >
+                  <svg width="10" height="10" viewBox="0 0 10 10">
+                    <rect x="0.5" y="4.5" width="9" height="1" fill="currentColor" />
+                  </svg>
+                </button>
+                <button
+                  className="win-control-btn win-maximize"
+                  title={isMaximized ? "还原" : "最大化"}
+                  type="button"
+                  onMouseDown={(event) => event.preventDefault()}
+                  onClick={handleToggleMaximize}
+                  aria-label={isMaximized ? "还原" : "最大化"}
+                >
+                  {isMaximized ? (
+                    <svg width="10" height="10" viewBox="0 0 10 10">
+                      <path d="M2 2V0.5h7V7.5H7.5" fill="none" stroke="currentColor" strokeWidth="1.3" />
+                      <rect x="0.5" y="2.5" width="7" height="7" rx="1" fill="none" stroke="currentColor" strokeWidth="1.3" />
+                    </svg>
+                  ) : (
+                    <svg width="10" height="10" viewBox="0 0 10 10">
+                      <rect x="0.5" y="0.5" width="9" height="9" rx="1" fill="none" stroke="currentColor" strokeWidth="1.3" />
+                    </svg>
+                  )}
+                </button>
+                <button
+                  className="win-control-btn win-close"
+                  title="关闭"
+                  type="button"
+                  onMouseDown={(event) => event.preventDefault()}
+                  onClick={handleClose}
+                  aria-label="关闭"
+                >
+                  <svg width="10" height="10" viewBox="0 0 10 10">
+                    <line x1="1.5" y1="1.5" x2="8.5" y2="8.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+                    <line x1="8.5" y1="1.5" x2="1.5" y2="8.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+                  </svg>
+                </button>
+              </>
+            )}
           </div>
         </div>
       }

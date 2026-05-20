@@ -951,6 +951,63 @@ body.resizing .jian-sidebar-inner {
   transition: none !important;
 }
 
+/* =============================================
+   Platform-specific titlebar adjustments
+   ============================================= */
+
+/* Windows: no macOS traffic lights on the left */
+.os-windows .tb-toggle-left {
+  margin-left: 0;
+}
+
+.os-windows .titlebar {
+  padding: 0 4px 0 8px;
+}
+
+/* =============================================
+   Window control buttons (Windows only)
+   ============================================= */
+
+.win-controls-sep {
+  width: 1px;
+  height: 16px;
+  margin: 0 2px;
+  background: rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+}
+
+.win-control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: var(--titlebar-h);
+  border: none;
+  border-radius: 0;
+  color: var(--text);
+  background: transparent;
+  transition: background var(--duration-fast);
+  -webkit-app-region: no-drag;
+}
+
+.win-control-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.win-control-btn:active {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.win-control-btn.win-close:hover {
+  color: #fff;
+  background: #e81123;
+}
+
+.win-control-btn.win-close:active {
+  color: #fff;
+  background: #bf0f1b;
+}
+
 @media (max-width: 760px) {
   .tb-toggle-left {
     margin-left: 4px;
